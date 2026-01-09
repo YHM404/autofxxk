@@ -60,7 +60,6 @@ description: 使用 yfinance 获取股票、市场等金融数据
 在使用任何脚本前，必须先运行：
 
 ```bash
-cd /Users/huiming.yao/workspace/fxxkcompany/.claude/skills/金融数据获取
 bash setup.sh
 ```
 

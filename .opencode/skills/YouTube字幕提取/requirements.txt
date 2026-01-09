@@ -1,0 +1,4 @@
+# YouTube 字幕提取工具依赖
+
+# yt-dlp - YouTube 视频下载和字幕提取
+yt-dlp>=2024.0.0

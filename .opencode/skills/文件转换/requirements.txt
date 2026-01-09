@@ -1,0 +1,5 @@
+# MarkItDown - 文件转换为 Markdown
+markitdown[all]>=0.1.0
+
+# 可选: 如果需要使用 OpenAI 增强功能
+openai>=1.0.0
