@@ -7,6 +7,7 @@ from agno.agent import Agent
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.yfinance import YFinanceTools
 from agno.tools.newspaper4k import Newspaper4kTools
+from agno.tools.tavily import TavilyTools
 
 from config_loader import get_agent_config, get_model_config, get_tool_config
 
@@ -222,6 +223,16 @@ def create_fundamental_analysis_agent() -> Agent:
     yf_config = get_tool_config("fundamental_analysis", "yfinance")
     if yf_config.get("enabled", True):
         tools.append(YFinanceTools())
+
+    # Tavily 搜索工具（AI 优化，需要 API Key）
+    tavily_config = get_tool_config("fundamental_analysis", "tavily")
+    if tavily_config.get("enabled", False):
+        tavily_params = {}
+        if "search_depth" in tavily_config:
+            tavily_params["search_depth"] = tavily_config["search_depth"]
+        if "include_answer" in tavily_config:
+            tavily_params["include_answer"] = tavily_config["include_answer"]
+        tools.append(TavilyTools(**tavily_params))
 
     # DuckDuckGo 工具 - 映射配置参数
     ddg_config = get_tool_config("fundamental_analysis", "duckduckgo")

@@ -4,6 +4,9 @@
 """
 
 from agents.financial_analyst_team import create_financial_analyst_team
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def interactive_mode():

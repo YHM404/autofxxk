@@ -13,4 +13,6 @@ dependencies = [
     "pyyaml>=6.0.0",
     "ddgs>=9.10.0",
     "newspaper4k>=0.9.4.1",
+    "tavily-python>=0.7.17",
+    "python-dotenv>=1.2.1",
 ]

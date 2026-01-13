@@ -258,40 +258,6 @@ class Config:
         tool_config = self.get(f"agents.{agent_type}.tools.{tool_name}", {})
         return tool_config
 
-    def get_api_key(self, provider: str = "openai") -> str:
-        """获取 API Key
-
-        Args:
-            provider: 提供商名称，如 "openai", "anthropic"
-
-        优先从环境变量读取，其次从配置文件读取
-        """
-        # 环境变量名映射
-        env_var_map = {
-            "openai": "OPENAI_API_KEY",
-            "anthropic": "ANTHROPIC_API_KEY",
-            "openai-compatible": "OPENAI_API_KEY",
-        }
-
-        env_var = env_var_map.get(provider, f"{provider.upper()}_API_KEY")
-        api_key = os.getenv(env_var)
-
-        if not api_key:
-            # 从配置文件读取
-            api_key = self.get(f"system.{provider}_api_key")
-
-        if not api_key:
-            raise ValueError(
-                f"未找到 {env_var}。"
-                f"请设置环境变量或在配置文件中配置 system.{provider}_api_key"
-            )
-
-        return api_key
-
-    def get_openai_api_key(self) -> str:
-        """获取 OpenAI API Key（向后兼容）"""
-        return self.get_api_key("openai")
-
     def get_system_config(self, key: str, default: Any = None) -> Any:
         """获取系统配置
 
@@ -360,8 +326,3 @@ def get_agent_config(agent_type: str) -> AgentConfig:
 def get_tool_config(agent_type: str, tool_name: str) -> Dict[str, Any]:
     """获取工具配置"""
     return config.get_tool_config(agent_type, tool_name)
-
-
-def get_openai_api_key() -> str:
-    """获取 OpenAI API Key"""
-    return config.get_openai_api_key()

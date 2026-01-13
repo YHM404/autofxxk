@@ -100,6 +100,11 @@ agents:
     debug_mode: false
 
     tools:
+      tavily:
+        enabled: false # AI 优化搜索（需要 API Key）
+        max_results: 10
+        topic: "news" # 宏观分析更关注新闻
+
       duckduckgo:
         enabled: true
         search: true
@@ -135,6 +140,11 @@ agents:
         cash_flow: true
         cache_results: true
 
+      tavily:
+        enabled: false # AI 优化搜索（需要 API Key）
+        max_results: 10
+        topic: "general" # 基本面分析需要综合信息
+
       duckduckgo:
         enabled: true
         search: true
@@ -152,14 +162,23 @@ agents:
 
     # Team Leader 自己的工具（用于快速搜索和验证信息）
     tools:
+      tavily:
+        enabled: false # Tavily: AI 优化的搜索引擎（推荐，需要 API Key）
+        max_results: 5 # 最多返回 5 个结果
+        topic: "general" # 搜索主题: "general" 或 "news"
+        # 使用方法:
+        #   1. 访问 https://tavily.com 获取 API Key
+        #   2. export TAVILY_API_KEY="tvly-your-key-here"
+        #   3. 设置 enabled: true
+
       duckduckgo:
-        enabled: true # Team Leader 可以自己搜索，无需总是委托给成员
+        enabled: true # DuckDuckGo（免费搜索工具，无需 API Key）
         search: true
         news: true
-        fixed_max_results: 5 # 更少的结果，用于快速验证
+        fixed_max_results: 5
 
       newspaper4k:
-        enabled: true # Team Leader 可以阅读新闻全文
+        enabled: true # 新闻全文阅读
 
     # 多轮对话配置
     history:

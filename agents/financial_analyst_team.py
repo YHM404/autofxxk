@@ -6,6 +6,7 @@
 from agno.team import Team
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.newspaper4k import Newspaper4kTools
+from agno.tools.tavily import TavilyTools
 
 from agents.technical_analysis_agent import create_technical_analysis_agent
 from agents.macro_analysis_agent import create_macro_analysis_agent
@@ -252,7 +253,17 @@ def create_financial_analyst_team() -> Team:
     # 为 Team Leader 配置工具（Team Leader 可以自己进行快速搜索和验证）
     team_tools = []
 
-    # DuckDuckGo 搜索工具
+    # Tavily 搜索工具（AI 优化的搜索引擎）
+    tavily_config = get_tool_config("team", "tavily")
+    if tavily_config.get("enabled", False):
+        tavily_params = {}
+        if "search_depth" in tavily_config:
+            tavily_params["search_depth"] = tavily_config["search_depth"]
+        if "include_answer" in tavily_config:
+            tavily_params["include_answer"] = tavily_config["include_answer"]
+        team_tools.append(TavilyTools(**tavily_params))
+
+    # DuckDuckGo 搜索工具（备用）
     ddg_config = get_tool_config("team", "duckduckgo")
     if ddg_config.get("enabled", False):
         ddg_params = {}
