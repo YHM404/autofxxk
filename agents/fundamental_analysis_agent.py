@@ -6,6 +6,7 @@
 from agno.agent import Agent
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.yfinance import YFinanceTools
+from agno.tools.newspaper4k import Newspaper4kTools
 
 from config_loader import get_agent_config, get_model_config, get_tool_config
 
@@ -233,6 +234,11 @@ def create_fundamental_analysis_agent() -> Agent:
         if "fixed_max_results" in ddg_config:
             ddg_params["fixed_max_results"] = ddg_config["fixed_max_results"]
         tools.append(DuckDuckGoTools(**ddg_params))
+
+    # Newspaper4k 工具 - 用于读取新闻文章全文
+    newspaper_config = get_tool_config("fundamental_analysis", "newspaper4k")
+    if newspaper_config.get("enabled", True):
+        tools.append(Newspaper4kTools())
 
     # 使用配置创建模型实例（自动支持不同的 provider）
     model = model_config.get_model_instance()

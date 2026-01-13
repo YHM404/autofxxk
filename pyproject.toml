@@ -12,4 +12,5 @@ dependencies = [
     "duckduckgo-search>=8.0.0",
     "pyyaml>=6.0.0",
     "ddgs>=9.10.0",
+    "newspaper4k>=0.9.4.1",
 ]

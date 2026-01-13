@@ -6,6 +6,7 @@
 from agno.agent import Agent
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.yfinance import YFinanceTools
+from agno.tools.newspaper4k import Newspaper4kTools
 
 from config_loader import get_agent_config, get_model_config, get_tool_config
 
@@ -272,6 +273,11 @@ def create_macro_analysis_agent() -> Agent:
     yf_config = get_tool_config("macro_analysis", "yfinance")
     if yf_config.get("enabled", True):
         tools.append(YFinanceTools())
+
+    # Newspaper4k 工具 - 用于读取新闻文章全文
+    newspaper_config = get_tool_config("macro_analysis", "newspaper4k")
+    if newspaper_config.get("enabled", True):
+        tools.append(Newspaper4kTools())
 
     # 使用配置创建模型实例（自动支持不同的 provider）
     model = model_config.get_model_instance()

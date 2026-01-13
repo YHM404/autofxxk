@@ -112,6 +112,9 @@ agents:
         stock_fundamentals: true
         cache_results: true
 
+      newspaper4k:
+        enabled: true # 用于读取新闻文章全文
+
   fundamental_analysis:
     name: "基本面分析师"
     role: "专注于公司基本面深度分析，包括商业模式、财务健康度、估值和风险评估"
@@ -136,6 +139,9 @@ agents:
         search: true
         news: true
         fixed_max_results: 10
+
+      newspaper4k:
+        enabled: true # 用于读取新闻文章全文
 
   team:
     name: "综合金融分析师团队"
