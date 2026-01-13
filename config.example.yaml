@@ -6,12 +6,12 @@
 models:
   # === 示例 1: 使用 OpenAI（默认）===
   default:
-    provider: "anthropic-compatible"
+    provider: "openai"
     id: "gpt-4o" # 可选: gpt-4o, gpt-4, gpt-3.5-turbo
-    temperature: 0.2 # 0-1，越高越有创造性
+    temperature: 0.7 # 0-1，越高越有创造性
     api_key: null # 优先使用环境变量 OPENAI_API_KEY
     base_url: null # 可选，自定义 API 端点
-    # max_tokens: null
+    max_tokens: null
 
   # === 示例 2: 使用 Anthropic Claude ===
   # default:

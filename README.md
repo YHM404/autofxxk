@@ -57,6 +57,21 @@
 
 ## 🚀 快速开始
 
+**一键启动**（如果已经配置好环境）：
+
+```bash
+# 1. 复制配置文件
+cp config.example.yaml config.yaml
+
+# 2. 编辑配置，设置你的 API Key
+vim config.yaml  # 修改 api_key 字段
+
+# 3. 运行系统
+uv run python main.py
+```
+
+### 详细步骤
+
 ### 1. 环境要求
 
 - Python >= 3.11
@@ -73,29 +88,64 @@ cd autofxxk
 uv sync
 ```
 
-### 3. 配置 API Key
+### 3. 创建配置文件
 
-需要设置 OpenAI API Key：
+从示例配置文件创建你自己的配置：
 
 ```bash
-export OPENAI_API_KEY='your-api-key-here'
+# 复制示例配置文件
+cp config.example.yaml config.yaml
 ```
 
-### 4. 配置系统（可选）
+### 4. 配置 API Key
 
-系统使用 `config.yaml` 配置文件。你可以修改配置来：
-- 更换模型（如使用 GPT-3.5-Turbo 降低成本）
-- 调整 Agent 行为（温度参数、工具配置）
-- 自定义输出格式
-
-详细配置说明请查看 [CONFIG_GUIDE.md](CONFIG_GUIDE.md)
+编辑 `config.yaml`，配置你的 API Key 和模型设置：
 
 ```bash
-# 编辑配置文件
 vim config.yaml
 ```
 
-### 5. 运行系统
+**方式 1：在配置文件中设置（推荐用于测试）**
+
+```yaml
+models:
+  default:
+    provider: "openai"              # 或 "anthropic", "anthropic-compatible"
+    id: "gpt-4o"                    # 模型 ID
+    api_key: "your-api-key-here"    # 你的 API Key
+    base_url: null                  # 第三方 API 需要设置
+```
+
+**方式 2：使用环境变量（推荐用于生产）**
+
+```bash
+# OpenAI
+export OPENAI_API_KEY='your-openai-key-here'
+
+# Anthropic
+export ANTHROPIC_API_KEY='your-anthropic-key-here'
+```
+
+然后在 `config.yaml` 中设置：
+```yaml
+models:
+  default:
+    provider: "openai"
+    id: "gpt-4o"
+    api_key: null  # 从环境变量读取
+```
+
+### 5. 其他配置（可选）
+
+你可以修改 `config.yaml` 来：
+- ✅ 更换模型（OpenAI、Anthropic、第三方兼容 API）
+- ✅ 调整 Agent 行为（温度参数、工具配置）
+- ✅ 配置多轮对话（历史记录管理）
+- ✅ 自定义系统设置（日志、缓存、超时）
+
+详细配置说明见下方的「配置说明」章节。
+
+### 6. 运行系统
 
 ```bash
 # 交互模式（支持多轮对话）
@@ -280,39 +330,6 @@ agent.print_response(
 - ✅ 标注来源和时效性
 - ✅ 明确不确定性和风险
 
-## 🛠️ 技术栈
-
-- [Agno](https://docs.agno.com) - 多 Agent 框架
-- 语言模型：
-  - [OpenAI GPT-4o](https://openai.com) - 默认模型
-  - [Anthropic Claude](https://www.anthropic.com) - 可选模型
-  - 支持任何兼容 OpenAI API 的模型
-- [YFinance](https://github.com/ranaroussi/yfinance) - 金融数据
-- [DuckDuckGo Search](https://github.com/deedy5/duckduckgo_search) - 网络搜索
-- [uv](https://github.com/astral-sh/uv) - Python 包管理
-
-## 📖 项目结构
-
-```
-autofxxk/
-├── agents/                              # Agent 定义
-│   ├── __init__.py
-│   ├── financial_analyst_team.py       # 主 Agent（团队）
-│   ├── fundamental_analysis_agent.py   # 基本面分析师
-│   ├── technical_analysis_agent.py     # 技术分析师
-│   └── macro_analysis_agent.py         # 宏观分析师
-├── config.yaml                          # 配置文件
-├── config.example.yaml                  # 配置示例
-├── config.third-party-api.yaml          # 第三方 API 配置模板
-├── config_loader.py                     # 配置加载器
-├── main.py                              # 主程序
-├── pyproject.toml                       # 项目配置
-├── README.md                            # 项目说明
-├── CONFIG_GUIDE.md                      # 配置指南
-├── ANTHROPIC_GUIDE.md                   # Anthropic 使用指南
-└── THIRD_PARTY_API_GUIDE.md             # 第三方 API 指南
-```
-
 ## ⚙️ 配置说明
 
 系统使用 `config.yaml` 进行配置管理，支持：
@@ -380,33 +397,6 @@ models:
     id: "your-model"
     base_url: "http://localhost:8000/v1"
 ```
-
-详细配置说明请查看：
-- [CONFIG_GUIDE.md](CONFIG_GUIDE.md) - 完整配置指南
-- [ANTHROPIC_GUIDE.md](ANTHROPIC_GUIDE.md) - Anthropic Claude 使用指南
-- [THIRD_PARTY_API_GUIDE.md](THIRD_PARTY_API_GUIDE.md) - 第三方 API 配置指南
-
-## 🤝 参考资料
-
-系统设计参考了以下分析框架（见 `.opencode/agent` 目录）：
-
-- 金融分析.md - 综合分析框架
-- 技术分析.md - 玄铁剑法方法论
-- 宏观分析.md - 宏观经济分析框架
-- 基本面分析.md - 证据驱动分析方法
-
-## 📝 开发计划
-
-- [x] 基础架构搭建
-- [x] 三个子 Agent 实现
-- [x] 主 Agent 团队协调
-- [x] 示例和文档
-- [x] **配置文件系统**（✨ 新增）
-- [ ] 添加更多数据源
-- [ ] 支持中国 A 股市场
-- [ ] 添加历史对话记忆
-- [ ] Web UI 界面
-- [ ] API 服务部署
 
 ## 📄 License
 
