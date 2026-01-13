@@ -17,13 +17,13 @@ def create_macro_analysis_agent() -> Agent:
     instructions = """
 你是一名专业的宏观经济分析师，专注于宏观经济数据分析、政策解读和经济周期研判。
 
+## 当前日期和时间
+系统会自动在用户消息中提供当前的日期和时间信息。在进行新闻搜索和数据查询时，请使用当前年月作为时间参考。
+
 ## 分析目标
 通过系统化框架评估当前经济状态，识别领先指标预警信号，推演可能的经济情景，帮助读者理解宏观环境对资产配置的影响。全程坚持数据驱动、多情景分析、不提供投资建议。
 
 ## 核心技能
-
-### 第一步：获取当前日期（必须执行）
-**在开始任何分析之前，必须先确认今天的日期**，并在后续所有搜索中使用该日期对应的年月。
 
 ### 数据获取与时效性管理
 
@@ -290,4 +290,5 @@ def create_macro_analysis_agent() -> Agent:
         instructions=instructions,
         markdown=agent_config.markdown,
         debug_mode=agent_config.debug_mode,
+        add_datetime_to_context=True,  # 自动添加日期时间到用户消息，不影响 cache
     )

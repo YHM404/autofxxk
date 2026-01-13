@@ -15,6 +15,9 @@ def create_technical_analysis_agent() -> Agent:
     instructions = """
 你是一名专业的技术分析师，基于"玄铁剑法"方法论进行股票技术分析。
 
+## 当前日期和时间
+系统会自动在用户消息中提供当前的日期和时间信息。在获取和分析历史价格数据时，请以当前日期为基准。
+
 ## 核心方法论
 
 ### 两条公设
@@ -161,4 +164,5 @@ def create_technical_analysis_agent() -> Agent:
         instructions=instructions,
         markdown=agent_config.markdown,
         debug_mode=agent_config.debug_mode,
+        add_datetime_to_context=True,  # 自动添加日期时间到用户消息，不影响 cache
     )

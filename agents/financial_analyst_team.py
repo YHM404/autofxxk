@@ -4,11 +4,13 @@
 """
 
 from agno.team import Team
+from agno.tools.duckduckgo import DuckDuckGoTools
+from agno.tools.newspaper4k import Newspaper4kTools
 
 from agents.technical_analysis_agent import create_technical_analysis_agent
 from agents.macro_analysis_agent import create_macro_analysis_agent
 from agents.fundamental_analysis_agent import create_fundamental_analysis_agent
-from config_loader import get_agent_config, get_model_config, config
+from config_loader import get_agent_config, get_model_config, config, get_tool_config
 
 
 def create_financial_analyst_team() -> Team:
@@ -16,22 +18,6 @@ def create_financial_analyst_team() -> Team:
 
     team_instructions = """
 你是综合金融分析师团队的协调者和整合者。你的职责是理解用户的金融问题，判断问题类型，将复杂问题拆解并派发给相应的专业子 agent，最后整合各方分析结果，提供深刻的客观洞察和多维度分析视角。
-
-## 团队成员介绍
-
-你有三位专业的团队成员：
-
-1. **基本面分析师**：
-   - 专长：公司基本面深度分析、商业模式评估、财务健康度、估值分析
-   - 适用场景：个股分析、公司研究、财务分析、估值评估
-
-2. **技术分析师**：
-   - 专长：股票技术分析、趋势判断、均线分析、位置评估
-   - 适用场景：技术面分析、趋势研判、买卖时机参考
-
-3. **宏观经济分析师**：
-   - 专长：宏观经济数据分析、政策解读、经济周期研判、资产配置逻辑
-   - 适用场景：宏观环境分析、经济形势判断、政策影响评估
 
 ## 核心职责
 
@@ -263,12 +249,33 @@ def create_financial_analyst_team() -> Team:
     # 使用配置创建模型实例（自动支持不同的 provider）
     model = model_config.get_model_instance()
 
+    # 为 Team Leader 配置工具（Team Leader 可以自己进行快速搜索和验证）
+    team_tools = []
+
+    # DuckDuckGo 搜索工具
+    ddg_config = get_tool_config("team", "duckduckgo")
+    if ddg_config.get("enabled", False):
+        ddg_params = {}
+        if "search" in ddg_config:
+            ddg_params["enable_search"] = ddg_config["search"]
+        if "news" in ddg_config:
+            ddg_params["enable_news"] = ddg_config["news"]
+        if "fixed_max_results" in ddg_config:
+            ddg_params["fixed_max_results"] = ddg_config["fixed_max_results"]
+        team_tools.append(DuckDuckGoTools(**ddg_params))
+
+    # Newspaper4k 工具
+    np4k_config = get_tool_config("team", "newspaper4k")
+    if np4k_config.get("enabled", False):
+        team_tools.append(Newspaper4kTools())
+
     # 准备团队参数
     team_params = {
         "name": team_config.name,
         "description": team_config.role,  # 使用 role 作为 description
         "model": model,
         "members": members,
+        "tools": team_tools if team_tools else None,  # Team Leader 自己的工具
         "instructions": team_instructions,
         "markdown": team_config.markdown,
         "debug_mode": team_config.debug_mode,
@@ -281,6 +288,8 @@ def create_financial_analyst_team() -> Team:
             team_params["num_history_runs"] = team_config.history.num_runs
         if team_config.history.num_messages is not None:
             team_params["num_history_messages"] = team_config.history.num_messages
+
+    team_params["add_datetime_to_context"] = True
 
     # 创建团队
     team = Team(**team_params)

@@ -20,6 +20,9 @@ class ModelConfig:
     max_tokens: Optional[int] = None
     api_key: Optional[str] = None
     base_url: Optional[str] = None
+    cache_system_prompt: bool = False  # Prompt caching（推荐用于生产）
+    cache_response: bool = False  # Response caching（适合开发测试）
+    cache_ttl: Optional[int] = None  # Response cache TTL（秒）
 
     def get_model_instance(self):
         """根据配置创建模型实例"""
@@ -49,6 +52,13 @@ class ModelConfig:
                 params["max_tokens"] = self.max_tokens
             if self.api_key:
                 params["api_key"] = self.api_key
+            # Caching 参数
+            if self.cache_system_prompt:
+                params["cache_system_prompt"] = True
+            if self.cache_response:
+                params["cache_response"] = True
+            if self.cache_ttl:
+                params["cache_ttl"] = self.cache_ttl
             return Claude(**params)
 
         elif self.provider == "openai-compatible":
@@ -82,6 +92,13 @@ class ModelConfig:
             # base_url 需要通过 client_params 传递
             if self.base_url:
                 params["client_params"] = {"base_url": self.base_url}
+            # Caching 参数
+            if self.cache_system_prompt:
+                params["cache_system_prompt"] = True
+            if self.cache_response:
+                params["cache_response"] = True
+            if self.cache_ttl:
+                params["cache_ttl"] = self.cache_ttl
             return Claude(**params)
 
         else:
@@ -193,6 +210,9 @@ class Config:
             max_tokens=model_config.get("max_tokens"),
             api_key=model_config.get("api_key"),
             base_url=model_config.get("base_url"),
+            cache_system_prompt=model_config.get("cache_system_prompt", False),
+            cache_response=model_config.get("cache_response", False),
+            cache_ttl=model_config.get("cache_ttl"),
         )
 
     def get_agent_config(self, agent_type: str) -> AgentConfig:

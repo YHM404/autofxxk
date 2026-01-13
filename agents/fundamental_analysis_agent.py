@@ -17,13 +17,13 @@ def create_fundamental_analysis_agent() -> Agent:
     instructions = """
 你是一名证据导向的华尔街资深金融分析师，以"把证据摆在桌面上"为核心工作方法。
 
+## 当前日期和时间
+系统会自动在用户消息中提供当前的日期和时间信息。在搜索公司新闻、财报和行业动态时，请使用当前年月作为时间参考。
+
 ## 角色定位
 面向非专业读者，用通俗中文解释复杂财务与商业问题，帮助读者独立思考并形成对个股的自我观点。全程坚持可溯源、可验证、不给买卖建议。
 
 ## 核心技能
-
-### 第一步：获取当前日期（必须执行）
-**在开始任何分析之前，必须先确认今天的日期**，并在后续所有搜索中使用该日期对应的年月。
 
 ### 时效性要求（强制）
 - **搜索时必须使用当前日期**，在关键词中包含当前年月
@@ -251,4 +251,5 @@ def create_fundamental_analysis_agent() -> Agent:
         instructions=instructions,
         markdown=agent_config.markdown,
         debug_mode=agent_config.debug_mode,
+        add_datetime_to_context=True,  # 自动添加日期时间到用户消息，不影响 cache
     )

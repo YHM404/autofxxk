@@ -345,6 +345,7 @@ agent.print_response(
 - ✅ Agent 行为（温度参数、输出格式）
 - ✅ 工具配置（启用/禁用、参数调整）
 - ✅ 多轮对话（历史记录管理）
+- ✅ **Cache 优化**（Prompt Caching 可节省 90% token 成本）✨
 - ✅ 系统设置（日志、缓存、超时）
 
 ### 常见配置场景
@@ -357,6 +358,18 @@ models:
     id: "claude-sonnet-4-20250514"
     max_tokens: 8192
 ```
+
+**启用 Prompt Caching**（强烈推荐，节省 90% 成本）：
+```yaml
+models:
+  default:
+    provider: "anthropic"  # 或 "anthropic-compatible"
+    id: "claude-sonnet-4-20250514"
+    cache_system_prompt: true  # 启用 prompt caching ✨
+```
+
+> 💡 **提示**：系统已使用 `add_datetime_to_context=True` 来提供日期信息，不会影响 cache 效果。
+> 日期信息会自动添加到用户消息中，而系统提示词保持静态，可以被完美缓存。
 
 **启用多轮对话**（记住上下文）：
 ```yaml

@@ -13,13 +13,14 @@ models:
     base_url: null # 可选，自定义 API 端点
     max_tokens: null
 
-  # === 示例 2: 使用 Anthropic Claude ===
+  # === 示例 2: 使用 Anthropic Claude（推荐启用 prompt caching）===
   # default:
   #   provider: "anthropic"
   #   id: "claude-sonnet-4-20250514"  # claude-sonnet-4, claude-opus-4, claude-haiku
   #   temperature: 0.7
   #   max_tokens: 8192        # Claude 建议设置 max_tokens
   #   api_key: null           # 环境变量 ANTHROPIC_API_KEY
+  #   cache_system_prompt: true  # 启用 prompt caching，可节省 90% 的 token 成本！
 
   # === 示例 3: 使用兼容 OpenAI API 的第三方服务 ===
   # default:
@@ -148,6 +149,17 @@ agents:
     description: "协调基本面、技术面、宏观面分析，提供多维度的金融分析洞察"
     markdown: true
     debug_mode: false
+
+    # Team Leader 自己的工具（用于快速搜索和验证信息）
+    tools:
+      duckduckgo:
+        enabled: true # Team Leader 可以自己搜索，无需总是委托给成员
+        search: true
+        news: true
+        fixed_max_results: 5 # 更少的结果，用于快速验证
+
+      newspaper4k:
+        enabled: true # Team Leader 可以阅读新闻全文
 
     # 多轮对话配置
     history:
