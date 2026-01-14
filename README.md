@@ -347,6 +347,7 @@ agent.print_response(
 - ✅ 多轮对话（历史记录管理）
 - ✅ **Cache 优化**（Prompt Caching 可节省 90% token 成本）✨
 - ✅ 系统设置（日志、缓存、超时）
+- ✅ 报告保存（对话记录落盘）
 
 ### 常见配置场景
 
@@ -416,6 +417,16 @@ models:
     id: "your-model"
     base_url: "http://localhost:8000/v1"
 ```
+
+**保存对话报告**：
+```yaml
+system:
+  output:
+    save_reports: true
+    report_dir: "reports"
+```
+
+> 💡 **提示**：若 `report_dir` 不存在，系统会自动创建目录。
 
 ## 📄 License
 

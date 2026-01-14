@@ -3,8 +3,12 @@
 使用 Agno 框架构建的综合金融分析系统
 """
 
+from pathlib import Path
+
 from agents.financial_analyst_team import create_financial_analyst_team
+from config_loader import config
 from dotenv import load_dotenv
+from utils.reporting import append_report_from_last_run, setup_reporting
 
 load_dotenv()
 
@@ -27,6 +31,13 @@ def interactive_mode():
     session_id = str(uuid4())
     print(f"📝 会话 ID: {session_id[:8]}...")
     print()
+
+    # 初始化报告保存（配置/目录/会话）
+    save_reports, report_context = setup_reporting(
+        team=team,
+        session_id=session_id,
+        base_dir=Path(__file__).parent,
+    )
 
     print("💡 使用提示：")
     print("  - 输入你的金融分析问题（例如：分析特斯拉的投资价值）")
@@ -70,6 +81,15 @@ def interactive_mode():
             print()
             print("-" * 60)
             print()
+
+            # 将本轮对话写入报告
+            if save_reports:
+                append_report_from_last_run(
+                    report_context=report_context,
+                    team=team,
+                    session_id=session_id,
+                    user_input=user_input,
+                )
 
         except KeyboardInterrupt:
             print("\n\n👋 再见！")

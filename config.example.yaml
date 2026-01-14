@@ -203,8 +203,8 @@ system:
 
   output:
     default_stream: true
-    save_reports: false
-    report_dir: "reports"
+    save_reports: false # 是否保存对话报告
+    report_dir: "reports" # 报告保存目录，不存在会自动创建
 
   performance:
     cache_enabled: true
